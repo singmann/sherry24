@@ -1,0 +1,8 @@
+Chris Berry
+Everyday Amnesia 2023/4
+
+-Scripts are numbered in sequence
+-Files are generated from scripts with numbers matching the script numbers
+- .R files ending "rev2" are modified from the original OSF submission in light of additional modelling conducted after the initial article submission.
+
+The final data files for each experiment (post participant exclusion) are in .csv files starting "2_"
