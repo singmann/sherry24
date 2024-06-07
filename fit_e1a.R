@@ -93,7 +93,7 @@ d_pred_uvsd2_l
 dagg2 <- left_join(dagg, d_pred_uvsd2_l) %>% 
   rename(data = n, model = uvsdt_m, upper = uvsdt_l, lower = uvsdt_h)
 
-dagg2 %>% 
+p1 <- dagg2 %>% 
   pivot_wider(names_from = cond, values_from = c(data, model, upper, lower)) %>% 
   arrange(desc(rating16)) %>% 
   mutate(across(-rating16, cumsum)) %>% 
@@ -107,7 +107,8 @@ dagg2 %>%
   geom_abline(slope = 1, intercept = 0) +
   geom_line(aes(group = 1)) +
   geom_point() +
-  coord_fixed(xlim = c(0, 1), ylim = c(0, 1))
+  coord_fixed(xlim = c(0, 1), ylim = c(0, 1)) +
+  ggtitle("uvsd fit")
 
 ### gumbel evsdt
 gumbel_formula <- brmsformula(
@@ -177,7 +178,7 @@ d_pred_uvsd2_l
 dagg3 <- left_join(dagg, d_pred_uvsd2_l) %>% 
   rename(data = n, model = uvsdt_m, upper = uvsdt_l, lower = uvsdt_h)
 
-dagg3 %>% 
+p2 <- dagg3 %>% 
   pivot_wider(names_from = cond, values_from = c(data, model, upper, lower)) %>% 
   arrange(desc(rating16)) %>% 
   mutate(across(-rating16, cumsum)) %>% 
@@ -191,7 +192,8 @@ dagg3 %>%
   geom_abline(slope = 1, intercept = 0) +
   geom_line(aes(group = 1)) +
   geom_point() +
-  coord_fixed(xlim = c(0, 1), ylim = c(0, 1))
+  coord_fixed(xlim = c(0, 1), ylim = c(0, 1)) +
+  ggtitle("Gumbel fit")
 
   
 ### mixture
@@ -228,9 +230,9 @@ fe1a_gumbelmix_2 <- brm(
 
 pred_gumbel_mix <- posterior_predict(fe1a_gumbelmix_2)
 # pptmp <- prepare_predictions(fe1a_gumbelmix_2)
-posterior_predict_gumbelmix6p(2, pptmp)
+#posterior_predict_gumbelmix6p(2, pptmp)
 
-d_pred_uvsd <- bind_cols(e1a_reco, as.data.frame(t(pred_gumbel)))
+d_pred_uvsd <- bind_cols(e1a_reco, as.data.frame(t(pred_gumbel_mix)))
 d_pred_uvsd2 <- d_pred_uvsd %>% 
   group_by(cond) %>% 
   summarise(across(starts_with("V"), 
@@ -249,10 +251,10 @@ d_pred_uvsd2_l <- d_pred_uvsd2 %>%
             uvsdt_h = quantile(value, 0.975))
 d_pred_uvsd2_l
 
-dagg3 <- left_join(dagg, d_pred_uvsd2_l) %>% 
+dagg4 <- left_join(dagg, d_pred_uvsd2_l) %>% 
   rename(data = n, model = uvsdt_m, upper = uvsdt_l, lower = uvsdt_h)
 
-dagg3 %>% 
+p3 <- dagg4 %>% 
   pivot_wider(names_from = cond, values_from = c(data, model, upper, lower)) %>% 
   arrange(desc(rating16)) %>% 
   mutate(across(-rating16, cumsum)) %>% 
@@ -266,5 +268,8 @@ dagg3 %>%
   geom_abline(slope = 1, intercept = 0) +
   geom_line(aes(group = 1)) +
   geom_point() +
-  coord_fixed(xlim = c(0, 1), ylim = c(0, 1))
+  coord_fixed(xlim = c(0, 1), ylim = c(0, 1)) +
+  ggtitle("Gumbel Mixture Fit")
 
+cowplot::plot_grid(p1, p2, p3, nrow = 1)
+ggsave("fit_comparison.pdf", width = 14, height = 5)

@@ -4,7 +4,7 @@ gumbelmix6p_stanvars <- "
      //return exp(gumbel_lccdf(-x | mu,disc));
      return 1 - gumbel_cdf(-x|mu,disc);
    }
-   real gumbel6p_lpmf(int y, real mu, 
+   real gumbelmix6p_lpmf(int y, real mu, 
                    real crc, real crlm, real crll, real crhm, real crhh, 
                    real mix,
                    int itemtype) {
