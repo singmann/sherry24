@@ -62,16 +62,17 @@ sv_gumbelmix6p <- stanvar(scode = gumbelmix6p_stanvars, block = "functions")
 
 log_lik_gumbelmix6p <- function(i, prep) {
   mu <- brms::get_dpar(prep, "mu", i = i)
-  discsignal <- brms::get_dpar(prep, "discsignal", i = i)
+  #discsignal <- brms::get_dpar(prep, "discsignal", i = i)
   crc <- brms::get_dpar(prep, "crc", i = i)
   crlm <- brms::get_dpar(prep, "crlm", i = i)
   crll <- brms::get_dpar(prep, "crll", i = i)
   crhm <- brms::get_dpar(prep, "crhm", i = i)
   crhh <- brms::get_dpar(prep, "crhh", i = i)
+  mix <- brms::get_dpar(prep, "mix", i = i)
   
   itemtype <- prep$data$vint1[i]
   y <- prep$data$Y[i]
-  gumbel6p_lpmf(y, mu, crc, crlm, crll, crhm, crhh, itemtype)
+  gumbelmix6p_lpmf(y, mu, crc, crlm, crll, crhm, crhh, mix, itemtype)
 }
 posterior_predict_gumbelmix6p <- function(i, prep, ...) {
   mu <- brms::get_dpar(prep, "mu", i = i)

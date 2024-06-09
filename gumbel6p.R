@@ -47,7 +47,7 @@ sv_gumbel6p <- stanvar(scode = gumbel6p_stanvars, block = "functions")
 
 log_lik_gumbel6p <- function(i, prep) {
   mu <- brms::get_dpar(prep, "mu", i = i)
-  discsignal <- brms::get_dpar(prep, "discsignal", i = i)
+  #discsignal <- brms::get_dpar(prep, "discsignal", i = i)
   crc <- brms::get_dpar(prep, "crc", i = i)
   crlm <- brms::get_dpar(prep, "crlm", i = i)
   crll <- brms::get_dpar(prep, "crll", i = i)

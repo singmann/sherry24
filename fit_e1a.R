@@ -273,3 +273,28 @@ p3 <- dagg4 %>%
 
 cowplot::plot_grid(p1, p2, p3, nrow = 1)
 ggsave("fit_comparison.pdf", width = 14, height = 5)
+
+##### loo
+expose_functions(fe1a_uvsdt_2, vectorize = TRUE)
+expose_functions(fe1a_gumbel_2, vectorize = TRUE)
+expose_functions(fe1a_gumbelmix_2, vectorize = TRUE)
+
+loo_uvsd <- loo(fe1a_uvsdt_2)
+loo_gumbel <- loo(fe1a_gumbel_2)
+loo_gumbelmix <- loo(fe1a_gumbelmix_2)
+
+loo_compare(loo_uvsd, loo_gumbel)
+#               elpd_diff se_diff
+# fe1a_gumbel_2   0.0       0.0  
+# fe1a_uvsdt_2  -13.9      15.3  
+
+loo_compare(loo_uvsd, loo_gumbelmix)
+#                  elpd_diff se_diff
+# fe1a_gumbelmix_2   0.0       0.0  ## gumbel is better
+# fe1a_uvsdt_2     -83.4      20.6  
+
+loo_compare(loo_uvsd, loo_gumbel, loo_gumbelmix)
+#                  elpd_diff se_diff
+# fe1a_gumbelmix_2   0.0       0.0  
+# fe1a_gumbel_2    -69.6      13.4  
+# fe1a_uvsdt_2     -83.4      20.6  
